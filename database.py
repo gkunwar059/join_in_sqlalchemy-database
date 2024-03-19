@@ -23,42 +23,40 @@ class User(Base):
     id:Mapped[int]=mapped_column(Integer,primary_key=True,nullable=False)
     name=mapped_column(String,nullable=False)
     phone_number=mapped_column(Integer,nullable=False)
-    # posts=relationship('Post',back_populates='user')
-    # comments=relationship('Comment',back_populates='user')
+    posts=relationship('Post',back_populates='user')
     
        
 class Post(Base):
     __tablename__='posts'
     id=mapped_column(Integer,primary_key=True)
     title=mapped_column(String,nullable=True)
-    # user_id=mapped_column(Integer,ForeignKey('users.id'))
-    # user=relationship('User',back_populates='posts')
+    user_id=mapped_column(Integer,ForeignKey('users.id'))
+    user=relationship('User',back_populates='posts')
     
     
-# class Comment(Base):
-#     __tablename__='comments'
-#     id=mapped_column(Integer,primary_key=True)
-#     text=mapped_column(String,nullable=False)
-#     user_id=mapped_column(Integer,ForeignKey('users.id'))
-    # user=relationship('User',back_populates='comments')
     
 Base.metadata.create_all(engine)
 
-# new_user=session.query(User).join(Post).filter(Post.title=='ram').all()
-# print(new_user)
-    
-    
-statement=select(User,Post).join(Post,User.id==Post.id).filter(Post.id==1)
 
-new_user=session.execute(statement).all()
-print(new_user)
-# for new in new_user:
-#     # print(new[0].name,new[0].phone_number)
-#     print(new)
+# inner join of this table 
+# inner_join=session.query(User,Post).join(User).first()
+# print(inner_join)
 
 
-# query all the users
-# all_user=session.query(User).all()
-# print(all_user)
-    
+# left outer join
+# left_outer_join=session.query(User,Post).join(User).first()
+# print(left_outer_join)
+
+# outer join 
+# outer_join=session.query(User,Post).outerjoin(User).first()
+# print(outer_join)
+
+# FULL(OUTER)JOIN:
+# full_outer_join=session.query(User,Post).outerjoin(Post).union_all(session.query(User,Post).outerjoin(User)).all()
+# print(full_outer_join)
+
+# CROSS JOIN:
+
+# cross_join=session.query(User,Post).all()
+# print(cross_join)
 

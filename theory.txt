@@ -96,10 +96,11 @@ JOIN
 INNER JOIN:
            :- inner_join_query = session.query(Order, Customer).join(Customer)
 
+
 LEFT(OUTER)JOIN:
            :- left_join_query = session.query(Customer, Order).outerjoin(Order)
 
-RIGHT(OUTER)JOIN:
+RIGHT(OUTER)JOIN:   
            :- right_join_query = session.query(Order, Customer).outerjoin(Customer)
 
 FULL(OUTER)JOIN:
@@ -113,5 +114,12 @@ FULL(OUTER)JOIN:
 
 CROSS JOIN:
         :- cross_join_query = session.query(Customer, Order)
+
+            
+            
+            
+    <<---------   IMPLEMENTATION OF THIS ----------> in above course
+
+
 
 
