@@ -1,0 +1,117 @@
+JOIN
+
+-> Join operation is used to combine rows from two or more tables based on a related column between them
+-> This allows you to retrieve data from multiple tables in a single query, creating a cohesive dataset.
+
+
+1. Inner Join:
+        An inner join returns only the rows that have matching values in both tables.
+
+ Syntax:
+    SELECT * FROM table1 INNER JOIN table2 ON table1.column = table2.column;
+        Examples:
+
+        SELECT Orders.OrderID, Customers.CustomerName
+        FROM Orders
+        INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID;
+
+
+
+2. Left (Outer) Join:
+        A left join returns all the rows from the left table and the matched rows from the right
+        table. If there are no matching rows in the right table, NULL values are returned.
+    
+    Syntax: SELECT * FROM table1 LEFT JOIN table2 ON table1.column = table2.column;
+    
+    Examples:
+
+    SELECT Customers.CustomerName, Orders.OrderID
+    FROM Customers
+    LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID;
+
+
+3.Right (Outer) Join:
+    A right join returns all the rows from the right table and the matched rows
+    from the left table. If there are no matching rows in the left table, NULL values are returned.
+
+    Syntax:
+    SELECT * FROM table1 RIGHT JOIN table2 ON table1.column = table2.column;
+
+    Examples:
+
+    SELECT Orders.OrderID, Customers.CustomerName
+    FROM Orders
+    RIGHT JOIN Customers ON Orders.CustomerID = Customers.CustomerID;
+
+
+4.Full (Outer) Join:
+    A full join returns all rows when there is a match in one of the tables. 
+    If there is no match, NULL values are returned for the missing side
+
+    Syntax:
+    SELECT * FROM table1 FULL JOIN table2 ON table1.column = table2.column;
+
+    Examples:
+
+    SELECT Customers.CustomerName, Orders.OrderID
+    FROM Customers
+    FULL JOIN Orders ON Customers.CustomerID = Orders.CustomerID;
+
+
+5.Cross Join(Full_JOin):
+    A cross join returns the Cartesian product of the two tables, i.e.,
+    all possible combinations of rows from both tables
+
+    Syntax:
+     SELECT * FROM table1 CROSS JOIN table2;
+    
+    Examples:
+
+    SELECT Customers.CustomerName, Orders.OrderID
+    FROM Customers
+    CROSS JOIN Orders;
+
+
+
+    -------------------------  SQL ALCHEMY JOIN--------------------------------
+
+            from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+            from sqlalchemy.orm import sessionmaker, relationship
+            from sqlalchemy.ext.declarative import declarative_base
+            engine = create_engine('sqlite:///:memory:', echo=True)
+            Base = declarative_base()
+            class Customer(Base):
+                __tablename__ = 'customers'
+                id = Column(Integer, primary_key=True)
+                name = Column(String)
+            class Order(Base):
+                __tablename__ = 'orders'
+                id = Column(Integer, primary_key=True)
+                customer_id = Column(Integer, ForeignKey('customers.id'))
+                customer = relationship("Customer")
+            Base.metadata.create_all(engine)
+            Session = sessionmaker(bind=engine)
+            session = Session()
+        
+INNER JOIN:
+           :- inner_join_query = session.query(Order, Customer).join(Customer)
+
+LEFT(OUTER)JOIN:
+           :- left_join_query = session.query(Customer, Order).outerjoin(Order)
+
+RIGHT(OUTER)JOIN:
+           :- right_join_query = session.query(Order, Customer).outerjoin(Customer)
+
+FULL(OUTER)JOIN:
+            :-SQLAlchemy doesn't directly support full outer joins, but you can achieve it using union_all:
+
+            from sqlalchemy import union_all
+
+            # Full Join (using union_all)
+            full_join_query = session.query(Customer, Order).outerjoin(Order).union_all(session.query(Customer, Order).outerjoin(Customer))
+
+
+CROSS JOIN:
+        :- cross_join_query = session.query(Customer, Order)
+
+
