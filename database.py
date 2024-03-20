@@ -34,10 +34,50 @@ class Post(Base):
     user=relationship('User',back_populates='posts')
     
     
+
+class Company(Base):
+    __tablename__='companies'
     
+    id=mapped_column(Integer,primary_key=True)
+    name=mapped_column(String,nullable=False)
+    
+class Department(Base):
+    __tablename__='departments'
+    
+    id=mapped_column(Integer,primary_key=True)
+    name=mapped_column(String,nullable=False)
+    company_id=mapped_column(Integer,ForeignKey('companies.id'))
+    
+class Employees(Base):
+    __tablename__='employees'
+    id=mapped_column(Integer,primary_key=True)
+    name=mapped_column(String,nullable=True)
+    salary=mapped_column(Integer,nullable=True)
+    department_id=mapped_column(Integer,ForeignKey('departments.id'))
+        
 Base.metadata.create_all(engine)
 
+# join ----company,department and employees   (( Joining 2 tables))
+# results=session.query(Employee,Department).join(Department,Department.id==Employee.department_id).all()
+# for employee, department in results:
+#     print(employee.name,department.name)
+    
 
+#JOINING 3 tables 
+result=session.query(Employees,Department,Company).select_from(Employees).join(Department).join(Company).filter(Company.name=='HydoPower').all()
+
+for employe4,department,company in result:
+    print(employe4.name,department.name,company.name)
+    
+
+
+
+
+
+
+
+
+# =======================================================================================================
 # inner join of this table 
 # inner_join=session.query(User,Post).join(User).first()
 # print(inner_join)
