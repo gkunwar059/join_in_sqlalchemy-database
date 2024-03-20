@@ -120,6 +120,14 @@ CROSS JOIN:
             
     <<---------   IMPLEMENTATION OF THIS ----------> in above course
 All the above Topic are important . Thankyou 
------GOOD LUCK---
+                   -----GOOD LUCK---
 
 
+
+#JOINING 3 tables 
+result=session.query(Employees,Department,Company).select_from(Employees).join(Department).join(Company).filter(Company.name=='HydoPower').all()
+
+for employe4,department,company in result:
+    print(employe4.name,department.name,company.name)
+    
+for 5 table same method will be used !!
