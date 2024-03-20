@@ -77,6 +77,8 @@ for employe4,department,company in result:
 
 
 
+
+
 # =======================================================================================================
 # inner join of this table 
 # inner_join=session.query(User,Post).join(User).first()
